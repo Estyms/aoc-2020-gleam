@@ -6,6 +6,7 @@ import days/day5
 import days/day6
 import days/day7
 import days/day8
+import days/day9
 import gleam/erlang
 import gleam/int
 import gleam/io
@@ -32,6 +33,7 @@ pub fn run_day(day: Int) {
     6 -> day6.start()
     7 -> day7.start()
     8 -> day8.start()
+    9 -> day9.start()
     _ -> io.println("Tried to run day " <> int.to_string(day))
   }
 }

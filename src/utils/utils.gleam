@@ -64,17 +64,20 @@ pub fn loop(
   }
 }
 
+pub fn create_int_range(start: Int, end: Int) -> List(Int) {
+  loop(
+    [start],
+    fn(lst) { list.last(lst) |> result.unwrap(0) < end },
+    fn(lst) {
+      list.append(lst, [list.last(lst) |> result.unwrap(0) |> int.add(1)])
+    },
+    fn(lst) { lst },
+  )
+}
+
 // Find indexes of items in a list that satisfies a predicate
 pub fn list_find_indexes(liste: List(a), predicate: fn(a) -> Bool) -> List(Int) {
-  let range =
-    loop(
-      [0],
-      fn(lst) { list.last(lst) |> result.unwrap(0) < list.length(liste) },
-      fn(lst) {
-        list.append(lst, [list.last(lst) |> result.unwrap(0) |> int.add(1)])
-      },
-      fn(lst) { lst },
-    )
+  let range = create_int_range(0, list.length(liste))
 
   range
   |> list.map(fn(idx) {
