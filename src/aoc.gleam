@@ -1,3 +1,5 @@
+import birl
+import birl/duration
 import days/day1
 import days/day2
 import days/day3
@@ -23,6 +25,7 @@ pub fn main() {
 }
 
 pub fn run_day(day: Int) {
+  let start = birl.now()
   case day {
     0 -> io.println_error("Invalid day")
     1 -> day1.start()
@@ -36,4 +39,8 @@ pub fn run_day(day: Int) {
     9 -> day9.start()
     _ -> io.println("Tried to run day " <> int.to_string(day))
   }
+  birl.now()
+  |> birl.difference(start)
+  |> duration.accurate_decompose
+  |> io.debug
 }

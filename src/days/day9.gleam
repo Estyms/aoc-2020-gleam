@@ -1,10 +1,14 @@
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/otp/task
 import gleam/result
 import gleam/string
 import simplifile
 import utils/utils
+
+// Constant to set weither or not you wanna use parallel computing using OTP
+const parallel = True
 
 pub fn start() -> Nil {
   let assert Ok(content) = simplifile.read("inputs/day9.txt")
@@ -83,23 +87,42 @@ fn part2(data: #(List(Int), List(Int))) {
   let #(a, b) = data
   let lst = list.append(a, b)
 
-  let assert Ok(Ok(range_lst)) =
-    utils.create_int_range(0, list.length(lst))
-    |> list.map(list.drop(lst, _))
-    |> list.map(solve_part_2(_, part1(data)))
-    |> list.find(fn(x) {
-      case x {
-        Ok(_) -> True
-        _ -> False
-      }
-    })
+  let to_find = part1(data)
+
+  let assert Ok(Ok(range)) = case parallel {
+    // OTP Computing
+    True -> {
+      utils.create_int_range(0, list.length(lst))
+      |> list.map(list.drop(lst, _))
+      |> list.map(fn(y) { task.async(fn() { solve_part_2(y, to_find) }) })
+      |> list.map(task.await_forever)
+      |> list.find(fn(x) {
+        case x {
+          Ok(_) -> True
+          _ -> False
+        }
+      })
+    }
+    // Sequential
+    False -> {
+      utils.create_int_range(0, list.length(lst))
+      |> list.map(list.drop(lst, _))
+      |> list.map(solve_part_2(_, part1(data)))
+      |> list.find(fn(x) {
+        case x {
+          Ok(_) -> True
+          _ -> False
+        }
+      })
+    }
+  }
 
   let assert Ok(mini) =
-    range_lst
+    range
     |> list.reduce(int.min)
 
   let assert Ok(maxi) =
-    range_lst
+    range
     |> list.reduce(int.max)
 
   mini + maxi
