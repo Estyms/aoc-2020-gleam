@@ -2,6 +2,7 @@ import birl
 import birl/duration
 import days/day1
 import days/day10
+import days/day11
 import days/day2
 import days/day3
 import days/day4
@@ -39,6 +40,7 @@ pub fn run_day(day: Int) {
     8 -> day8.start()
     9 -> day9.start()
     10 -> day10.start()
+    11 -> day11.start()
     _ -> io.println("Tried to run day " <> int.to_string(day))
   }
   birl.now()

@@ -2,7 +2,6 @@ import gleam/dict
 import gleam/int
 import gleam/io
 import gleam/list
-import gleam/option
 import gleam/result
 import gleam/string
 import simplifile
@@ -45,7 +44,7 @@ fn part1(data: List(Int)) {
         1 -> #(acc.0 + 1, acc.1, acc.2)
         2 -> #(acc.0, acc.1 + 1, acc.2)
         3 -> #(acc.0, acc.1, acc.2 + 1)
-        _ -> todo
+        _ -> acc
       }
     })
 
